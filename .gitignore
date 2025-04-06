@@ -7,7 +7,6 @@ logs
 #soubory
 .env
 *.Identifier
-test.py
 create_table.py
 getProductParserSQL.py
 *.xml
