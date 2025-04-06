@@ -1,0 +1,13 @@
+xml
+csv
+logs
+.venv
+*.pyc
+
+#soubory
+.env
+*.Identifier
+test.py
+create_table.py
+getProductParserSQL.py
+*.xml
