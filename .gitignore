@@ -10,3 +10,5 @@ logs
 create_table.py
 getProductParserSQL.py
 *.xml
+productImporter.py
+run.sh

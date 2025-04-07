@@ -9,6 +9,7 @@ import sys
 from datetime import datetime
 import pytz
 from utils import log
+from soap_client import getProductCatalogueFullNavFilterSOAPDownloadXML
 
 
 load_dotenv()
@@ -49,41 +50,6 @@ def clean_name(name):
                                       for word in name.split() if word.lower() != 'a') if c.isalnum())
 
 
-def soap_request(root_name, super_name, cat_name, cat_code, super_code, root_code):
-    try:
-        session = Session()
-        transport = Transport(session=session)
-        client = Client(wsdl=WSDL_URL, transport=transport)
-
-        response = client.service.getProductCatalogueFullNavFilterSOAPDownloadXML(
-            login=SOAP_LOGIN,
-            password=SOAP_PASSWORD,
-            onStock=True,
-            filter={
-                "superCategory": {
-                    "ProductCategoryList": {"ProductCategory": [None, None]},
-                    "SuperCategoryCode": super_code,
-                    "SuperCategoryName": super_name,
-                    "ParentSuperCategoryCode": root_code
-                },
-                "category": {
-                    "CategoryCode": cat_code,
-                    "CategoryName": cat_name,
-                    "ProductAttributeList": {"ProductCategoryAttribute": [None, None]},
-                    "ImageList": {"ProductCategoryImage": [None, None]}
-                },
-                "productProducerList": {"ProductProducer": []},
-                "productNavigatorDataList": {"ProductNavigatorData": []}
-            }
-        )
-
-        return response.ProductListStatus
-
-    except Exception as e:
-        log(f"❌ SOAP request failed: {e}")
-        return None
-
-
 def download_xml(url, root_name, super_name, cat_name):
     safe_name = clean_name(cat_name)
     filename = f"{safe_name}.xml"
@@ -107,7 +73,7 @@ def download_xml(url, root_name, super_name, cat_name):
 
 def process_category(cursor, root, super_cat, cat):
     log(f"🔄 Processing: {cat['CategoryName']}")
-    response = soap_request(
+    response = getProductCatalogueFullNavFilterSOAPDownloadXML(
         root['SuperCategoryName'], super_cat['SuperCategoryName'],
         cat['CategoryName'], cat['CategoryCode'],
         super_cat['SuperCategoryCode'], root['SuperCategoryCode']
@@ -180,7 +146,7 @@ def process_selection(cursor, root_code):
             process_category(cursor, root, super_cat, cat[0])
 
 
-def main():
+def getProductCatalogueFullNavFilterSOAPDownload():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -212,4 +178,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    getProductCatalogueFullNavFilterSOAPDownload()
