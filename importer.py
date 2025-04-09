@@ -1,4 +1,5 @@
 # importer.py
+from soap_client import get_product_categories_image
 from utils import log
 
 def insert_super_categories(connection, items):
@@ -42,6 +43,43 @@ def insert_categories(connection, categories, super_category_code):
             log(f"❌ Chyba při ukládání kategorie: {e}")
     connection.commit()
     log(f"✅ Uloženo {count} nových kategorií.")
+
+def update_category_images(connection):
+    log("Aktualizuji obrázky kategorií")
+    cursor = connection.cursor()
+    updated = 0
+
+    response = get_product_categories_image()
+    categories = response.get("ProductCategoryList", {}).get("ProductCategory", [])
+
+    if isinstance(categories, dict):
+        categories = [categories]
+
+    for cat in categories:
+        category_code = cat.get("CategoryCode")
+        image_url = None
+
+        image_list = cat.get("ImageList")
+        if image_list and "ProductCategoryImage" in image_list:
+            images = image_list["ProductCategoryImage"]
+            if isinstance(images, dict):
+                images = [images]
+            if isinstance(images, list) and len(images) > 0:
+                image_url = images[0].get("URL")
+
+        try:
+            cursor.execute("""
+                UPDATE categories
+                SET ImageList = %s
+                WHERE CategoryCode = %s
+            """, (image_url, category_code))
+            if cursor.rowcount > 0:
+                updated += 1
+        except Exception as e:
+            log(f"❌ Chyba při aktualizaci obrázku pro kategorii {category_code}: {e}")
+
+    connection.commit()
+    log(f"✅ Aktualizováno {updated} kategorií s novými obrázky.")
 
 
 def insert_attributes(connection, attributes):

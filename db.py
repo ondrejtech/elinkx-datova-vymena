@@ -28,6 +28,7 @@ def migrate_tables(connection):
                 CategoryCode INT NOT NULL UNIQUE,
                 CategoryName VARCHAR(255) NOT NULL,
                 SuperCategoryCode INT,
+                ImageList varchar(255),
                 FOREIGN KEY (SuperCategoryCode) REFERENCES super_categories(SuperCategoryCode) ON DELETE SET NULL
             );
             SET FOREIGN_KEY_CHECKS = 1;
@@ -137,7 +138,7 @@ def migrate_tables(connection):
             DROP TABLE IF EXISTS products;
             CREATE TABLE IF NOT EXISTS products (
                 ProId INT PRIMARY KEY UNIQUE,
-                Code VARCHAR(10) NULL,
+                Code VARCHAR(20) NULL,
                 Name TEXT,
                 YourPrice DECIMAL(10, 2),
                 YourPriceWithFees DECIMAL(10, 2),
@@ -163,8 +164,8 @@ def migrate_tables(connection):
                 Description LONGTEXT,
                 IsTop BOOLEAN,
                 InfoCode TEXT,
-                WarrantyTerm INT,
-                WarrantyUnit TEXT,
+                WarrantyTerm varchar(50) null,
+                WarrantyUnit varchar(50) null,
                 PartNumber2 TEXT,
                 DateAvailible DATETIME,
                 DealerPrice1 DECIMAL(10, 2),

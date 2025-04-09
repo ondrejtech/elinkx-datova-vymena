@@ -3,13 +3,20 @@ from zeep import Client
 from zeep.helpers import serialize_object
 from zeep.transports import Transport
 from config import SOAP_LOGIN, SOAP_PASSWORD, WSDL_URL
-from utils import log_soap_response
+from utils import log, log_soap_response
 
 def get_navigator_data():
     client = Client(wsdl=WSDL_URL)
     response = client.service.getNavigator(SOAP_LOGIN, SOAP_PASSWORD)
     log_soap_response(response, "navigator_response.xml")
     return serialize_object(response)
+
+def get_product_categories_image():
+    client = Client(wsdl=WSDL_URL)
+    response = client.service.getProductCategoryList(SOAP_LOGIN, SOAP_PASSWORD)
+    log_soap_response(response, "product_category_list.xml")
+    return serialize_object(response)
+
 
 def get_product_producers():
     client = Client(wsdl=WSDL_URL)
@@ -44,7 +51,7 @@ def getProductCatalogueFullNavFilterSOAPDownloadXML(root_name, super_name, cat_n
         response = client.service.getProductCatalogueFullNavFilterSOAPDownloadXML(
             login=SOAP_LOGIN,
             password=SOAP_PASSWORD,
-            onStock=True,
+            onStock='true',
             filter={
                 "superCategory": {
                     "ProductCategoryList": {"ProductCategory": [None, None]},

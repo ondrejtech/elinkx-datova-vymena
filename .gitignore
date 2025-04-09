@@ -3,6 +3,7 @@ csv
 logs
 .venv
 *.pyc
+backup
 
 #soubory
 .env
@@ -11,4 +12,4 @@ create_table.py
 getProductParserSQL.py
 *.xml
 productImporter.py
-run.sh
+test.py
