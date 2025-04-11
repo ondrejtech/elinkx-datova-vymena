@@ -213,7 +213,7 @@ def migrate_tables(connection):
             SET FOREIGN_KEY_CHECKS = 0;
             DROP TABLE IF EXISTS product_logistic;
             CREATE TABLE IF NOT EXISTS product_logistic (
-                ProId INT NOT NULL,
+                ProId INT NOT NULL PRIMARY KEY,
                 `typ` VARCHAR(20) NOT NULL,
                 `count` VARCHAR(20) NOT NULL,
                 weight DECIMAL(10,2) NOT NULL,
