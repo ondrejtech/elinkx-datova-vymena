@@ -24,5 +24,5 @@ y
 y
 EOF
 python3 alter_table.py
-
-echo "🎉 Hotovo."
+python3 productLogisticImporter.py
+python3 productNavigatorImporter.py

@@ -44,7 +44,8 @@ def proces_product_navigator_data(xml_files, connection, root_category, super_ca
 
         for xml_file in xml_files:
             xml_path = os.path.join('xml', root_category, super_category, xml_file)
-            log(f"Zpracovávám soubor: {xml_file}")
+            prague_time = datetime.now(pytz.timezone('Europe/Prague')).strftime('%Y-%m-%d %H:%M:%S')
+            log(f"📄 [{prague_time}] Zpracovávám soubor: {xml_file}")
 
             try:
                 tree = ET.parse(xml_path)
@@ -68,20 +69,20 @@ def proces_product_navigator_data(xml_files, connection, root_category, super_ca
                             value_code = logistic_data.find('ValueCode')
 
                             if attribute_code is None or value_code is None:
-                                log(f"⚠️ Chybí AttributeCode nebo ValueCode pro ProId={data['ProId']}")
+                                log(f"⚠️ [{prague_time}] Chybí AttributeCode nebo ValueCode pro ProId={data['ProId']}")
                                 continue
 
                             data['attribute_code'] = int(attribute_code.text)
                             data['value_code'] = int(value_code.text)
 
                         except Exception as e:
-                            log(f"Chyba při zpracování ProductNavigatorData pro ProId={data['ProId']}: {e}")
+                            log(f" [{prague_time}] Chyba při zpracování ProductNavigatorData pro ProId={data['ProId']}: {e}")
                             continue
 
                         # 💡 Ověření existence attribute_code
                         cursor.execute("SELECT 1 FROM category_attributes WHERE AttributeCode = %s", (data['attribute_code'],))
                         if cursor.fetchone() is None:
-                            log(f"⚠️ AttributeCode {data['attribute_code']} neexistuje k productu {data['ProId']} – loguji.")
+                            log(f"⚠️ [{prague_time}] AttributeCode {data['attribute_code']} neexistuje k productu {data['ProId']} – loguji.")
                             csv_writer.writerow([data['ProId'], data['attribute_code']])
                             continue
 
@@ -96,7 +97,8 @@ def proces_product_navigator_data(xml_files, connection, root_category, super_ca
                         try:
                             cursor.execute(insert_query, data)
                         except Exception as e:
-                            log(f"Chyba při SQL pro ProId={data['ProId']} AttributeCode={data['attribute_code']} ValueCode={data['value_code']}: {e}")
+                            pass
+                            log(f"❌ [{prague_time}]Chyba při SQL pro ProId={data['ProId']} AttributeCode={data['attribute_code']} ValueCode={data['value_code']}: {e}")
 
                 connection.commit()
 

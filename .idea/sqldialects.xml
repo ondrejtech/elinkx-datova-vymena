@@ -7,5 +7,6 @@
     <file url="file://$PROJECT_DIR$/importer.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/productImporter.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/productLogisticImporter.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/productNavigatorImporter.py" dialect="GenericSQL" />
   </component>
 </project>
