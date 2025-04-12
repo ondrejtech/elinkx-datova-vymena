@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# smazani slozky xml a jeji znovu vytvoreni  
+# smazani slozky xml a jeji znovu vytvoreni
 rm -rf ./xml
 mkdir ./xml
 
@@ -26,3 +26,4 @@ EOF
 python3 alter_table.py
 python3 productLogisticImporter.py
 python3 productNavigatorImporter.py
+python3 productImageImporter.py
