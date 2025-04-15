@@ -125,9 +125,19 @@ def migrate_tables(connection):
             DROP TABLE IF EXISTS users;
             CREATE TABLE IF NOT EXISTS users (
                 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                username VARCHAR(255) NOT NULL UNIQUE,
+                name VARCHAR(255) NOT NULL,
+                surname VARCHAR(255) NOT NULL,
+                phone VARCHAR(255) NULL,
                 email VARCHAR(255) NOT NULL UNIQUE,
                 password_hash TEXT NOT NULL,
+                note VARCHAR(255) NULL,
+                ic VARCHAR(255) NULL,
+                dic VARCHAR(255) NULL,
+                company_name VARCHAR(255) NULL,
+                street VARCHAR(255) NOT NULL,
+                city VARCHAR(255) NOT NULL,
+                postcode VARCHAR(255) NOT NULL,
+                state VARCHAR(255) NOT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
@@ -265,6 +275,21 @@ def migrate_tables(connection):
                 FOREIGN KEY (ProId) REFERENCES products(ProId) ON DELETE CASCADE
             );
             SET FOREIGN_KEY_CHECKS = 1;
+        """,
+        "order_items": """
+                    SET FOREIGN_KEY_CHECKS = 0;
+                    DROP TABLE IF EXISTS invoices;
+                    CREATE TABLE IF NOT EXISTS invoices (
+                        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        invoice_number varchar(255) NOT NULL,
+                        order_number VARCHAR(255) NOT NULL,
+                        user_id INT NOT NULL,
+                        status varchar(255),
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                    );
+                    SET FOREIGN_KEY_CHECKS = 1;
         """
     }
 
