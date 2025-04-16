@@ -134,7 +134,7 @@ def migrate_tables(connection):
                 ic VARCHAR(255) NULL,
                 dic VARCHAR(255) NULL,
                 company_name VARCHAR(255) NULL,
-                street VARCHAR(255) NOT NULL,
+                address VARCHAR(255) NOT NULL,
                 city VARCHAR(255) NOT NULL,
                 postcode VARCHAR(255) NOT NULL,
                 state VARCHAR(255) NOT NULL,

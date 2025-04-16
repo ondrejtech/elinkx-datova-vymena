@@ -1,9 +1,9 @@
-xml
-csv
-logs
-.venv
-*.pyc
-backup
+xml/
+csv/
+logs/
+.venv/
+*.pyc/
+backup/
 
 #soubory
 .env
